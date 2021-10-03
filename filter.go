@@ -1,4 +1,4 @@
-package log
+package logger
 
 // FilterOption is filter option.
 type FilterOption func(*Filter)
