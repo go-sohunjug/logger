@@ -5,12 +5,8 @@ import (
 	"log"
 )
 
-var (
-	// DefaultLogger is default logger.
-	DefaultLogger Logger = NewStdLogger(log.Writer())
-	Default Logger = With(DefaultLogger, "ts", DefaultTimestamp, "caller", DefaultCaller)
-	DefaultHelper *Helper = NewHelper(Default)
-)
+// DefaultLogger is default logger.
+var DefaultLogger Logger = NewStdLogger(log.Writer())
 
 // Logger is a logger interface.
 type Logger interface {

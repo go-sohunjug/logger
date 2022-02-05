@@ -6,13 +6,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"go.opentelemetry.io/otel/trace"
 )
 
 var (
+	defaultDepth = 3
 	// DefaultCaller is a Valuer that returns the file and line.
-	DefaultCaller = Caller(3)
+	DefaultCaller = Caller(defaultDepth)
 
 	// DefaultTimestamp is a Valuer that returns the current wallclock time.
 	DefaultTimestamp = Timestamp(time.RFC3339)
@@ -32,14 +31,15 @@ func Value(ctx context.Context, v interface{}) interface{} {
 // Caller returns returns a Valuer that returns a pkg/file:line description of the caller.
 func Caller(depth int) Valuer {
 	return func(context.Context) interface{} {
-		_, file, line, _ := runtime.Caller(depth)
+		d := depth
+		_, file, line, _ := runtime.Caller(d)
 		if strings.LastIndex(file, "/log/filter.go") > 0 {
-			depth++
-			_, file, line, _ = runtime.Caller(depth)
+			d++
+			_, file, line, _ = runtime.Caller(d)
 		}
 		if strings.LastIndex(file, "/log/helper.go") > 0 {
-			depth++
-			_, file, line, _ = runtime.Caller(depth)
+			d++
+			_, file, line, _ = runtime.Caller(d)
 		}
 		idx := strings.LastIndexByte(file, '/')
 		return file[idx+1:] + ":" + strconv.Itoa(line)
@@ -50,26 +50,6 @@ func Caller(depth int) Valuer {
 func Timestamp(layout string) Valuer {
 	return func(context.Context) interface{} {
 		return time.Now().Format(layout)
-	}
-}
-
-// TraceID returns a traceid valuer.
-func TraceID() Valuer {
-	return func(ctx context.Context) interface{} {
-		if span := trace.SpanContextFromContext(ctx); span.HasTraceID() {
-			return span.TraceID().String()
-		}
-		return ""
-	}
-}
-
-// SpanID returns a spanid valuer.
-func SpanID() Valuer {
-	return func(ctx context.Context) interface{} {
-		if span := trace.SpanContextFromContext(ctx); span.HasSpanID() {
-			return span.SpanID().String()
-		}
-		return ""
 	}
 }
 

@@ -1,15 +1,15 @@
 package logger
 
 import (
+	"context"
 	"os"
 	"testing"
 )
 
 func TestInfo(t *testing.T) {
 	logger := DefaultLogger
-	DefaultHelper.Infof("key1 %s %s %s", "value1", "key2", "value2")
 	logger = With(logger, "ts", DefaultTimestamp, "caller", DefaultCaller)
-	logger.Log(LevelInfo, "key1", "value1")
+	_ = logger.Log(LevelInfo, "key1", "value1")
 }
 
 func TestWrapper(t *testing.T) {
@@ -17,5 +17,9 @@ func TestWrapper(t *testing.T) {
 	err := NewStdLogger(os.Stderr)
 
 	l := With(MultiLogger(out, err), "ts", DefaultTimestamp, "caller", DefaultCaller)
-	l.Log(LevelInfo, "msg", "test")
+	_ = l.Log(LevelInfo, "msg", "test")
+}
+
+func TestWithContext(t *testing.T) {
+	WithContext(context.Background(), nil)
 }

@@ -24,7 +24,7 @@ helper.Infow("key", "value")
 
 // filter
 log := log.NewHelper(log.NewFilter(logger,
-	log.FilterLevel(LevelInfo),
+	log.FilterLevel(log.LevelInfo),
 	log.FilterKey("foo"),
 	log.FilterValue("bar"),
 	log.FilterFunc(customFilter),
@@ -33,4 +33,18 @@ log.Debug("debug log")
 log.Info("info log")
 log.Warn("warn log")
 log.Error("warn log")
+```
+
+## Third party log library
+
+### zap
+
+```shell
+go get -u github.com/go-kratos/kratos/contrib/log/zap/v2
+```
+
+### fluent
+
+```shell
+go get -u github.com/go-kratos/kratos/contrib/log/fluent/v2
 ```
