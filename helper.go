@@ -51,6 +51,10 @@ func (h *Helper) Log(level Level, keyvals ...interface{}) {
 	_ = h.logger.Log(level, keyvals...)
 }
 
+func (h *Helper) Printf(format string, a ...interface{}) {
+	h.Infof(format, a...)
+}
+
 // Debug logs a message at debug level.
 func (h *Helper) Debug(a ...interface{}) {
 	_ = h.logger.Log(LevelDebug, h.msgKey, fmt.Sprint(a...))
