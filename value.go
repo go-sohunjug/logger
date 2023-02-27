@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	defaultDepth = 4
+	defaultDepth = 3
 	// DefaultCaller is a Valuer that returns the file and line.
 	DefaultCaller = Caller(defaultDepth)
 
